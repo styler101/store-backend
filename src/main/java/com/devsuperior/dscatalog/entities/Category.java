@@ -1,12 +1,19 @@
 package com.devsuperior.dscatalog.entities;
 
+
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.Objects;
-
+// Camada de entidade que será as representações com o banco de dados.
+@Entity
+@Table(name="tb_category")
 public class Category implements Serializable {
     private static final Long serialVersionUID = 1L;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     public Category(){}
 
