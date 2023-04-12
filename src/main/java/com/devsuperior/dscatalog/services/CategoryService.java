@@ -5,6 +5,7 @@ import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
 
 
+import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +27,9 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public CategoryDTO findById(Long id){
+    public CategoryDTO findById(Long id) throws ResourceNotFoundException {
         Optional<Category> object = repository.findById(id); // Optional é uma abordagem para garantir que o valor não venha nulo
-        Category category = object.get();
+        Category category = object.orElseThrow(() -> new ResourceNotFoundException("Entity not found!"));
         return new CategoryDTO(category);
     }
 
