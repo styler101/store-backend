@@ -2,7 +2,6 @@ package com.devsuperior.dscatalog.entities;
 
 
 import jakarta.persistence.*;
-
 import java.io.Serializable;
 import java.util.Objects;
 // Camada de entidade que será as representações com o banco de dados.
