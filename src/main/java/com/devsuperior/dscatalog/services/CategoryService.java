@@ -9,6 +9,8 @@ import com.devsuperior.dscatalog.services.exceptions.DataBaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +29,9 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true) // o próprio framework vai garantir as operações de transações
-    public List<CategoryDTO> findAll() {
-        List<Category> categoryList = repository.findAll();
-        return categoryList.stream().map(CategoryDTO::new).collect(Collectors.toList());
+    public Page<CategoryDTO> findAllPaged(PageRequest pageRequest) {
+        Page<Category> categories = repository.findAll(pageRequest); // O pageable já é uma stream do java 8
+        return categories.map(x -> new CategoryDTO(x));
     }
 
     @Transactional(readOnly = true)
