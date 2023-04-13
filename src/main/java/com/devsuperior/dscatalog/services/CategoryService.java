@@ -5,11 +5,14 @@ import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
 
 
+import com.devsuperior.dscatalog.services.exceptions.DataBaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import java.util.Optional;
@@ -48,7 +51,7 @@ public class CategoryService {
     @Transactional
     public CategoryDTO update(Long id, CategoryDTO dto) {
         try {
-            Category entity = repository.getReferenceById(id); // Pega o objeto sem precisar ir no banco de dados. O objeto fica representado na memória
+            Category entity = repository.getOne(id); // Pega o objeto sem precisar ir no banco de dados. O objeto fica representado na memória
             entity.setName(dto.getName());
             entity = repository.save(entity);
             return new CategoryDTO(entity);
@@ -56,4 +59,16 @@ public class CategoryService {
             throw new ResourceNotFoundException("Id not found" + id);
         }
     }
+
+    public void delete(Long id){
+       try{
+          repository.deleteById(id);
+       }catch(EmptyResultDataAccessException e){
+           e.printStackTrace();
+           throw new ResourceNotFoundException("Id not found!" + id);
+       }catch( DataIntegrityViolationException e){
+            throw new DataBaseException("Integrate violioation");
+       }
+    }
+
 }

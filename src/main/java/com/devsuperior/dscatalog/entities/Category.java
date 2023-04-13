@@ -1,8 +1,10 @@
 package com.devsuperior.dscatalog.entities;
 
 
-import jakarta.persistence.*;
+
+import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 // Camada de entidade que será as representações com o banco de dados.
 @Entity
@@ -14,6 +16,12 @@ public class Category implements Serializable {
     private Long id;
 
     private String name;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") // Vai salvar as informação no formato utc
+    private Instant createdAt;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant updatedAt;
     public Category(){}
 
     public Category(Long id, String name){
@@ -43,4 +51,25 @@ public class Category implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    @PrePersist
+    public void prePersist(){
+        createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void  preUpdate(){
+        updatedAt = Instant.now();
+    }
+
+
 }
