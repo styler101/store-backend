@@ -1,6 +1,8 @@
 package com.devsuperior.dscatalog.entities;
 
 
+import com.devsuperior.dscatalog.dto.CategoryDTO;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -90,9 +92,7 @@ public class Product implements Serializable {
         this.date = date;
     }
 
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
-    }
+
 
     public Set<Category> getCategories(){
         return categories;
