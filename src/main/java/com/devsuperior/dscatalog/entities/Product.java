@@ -1,11 +1,11 @@
 package com.devsuperior.dscatalog.entities;
 
-import org.springframework.data.annotation.TypeAlias;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -94,6 +94,9 @@ public class Product implements Serializable {
         this.categories = categories;
     }
 
+    public Set<Category> getCategories(){
+        return categories;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

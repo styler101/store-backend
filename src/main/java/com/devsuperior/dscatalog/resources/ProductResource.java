@@ -1,6 +1,7 @@
 package com.devsuperior.dscatalog.resources;
 
 import com.devsuperior.dscatalog.dto.ProductDTO;
+import com.devsuperior.dscatalog.entities.Product;
 import com.devsuperior.dscatalog.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.servlet.ServletRequest;
+import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/products")
@@ -30,10 +35,21 @@ public class ProductResource {
     }
 
     @GetMapping(value="/{id}")
-    public ResponseEntity findById(@PathVariable Long id){
+    public ResponseEntity<ProductDTO> findById(@PathVariable Long id){
         ProductDTO  product = service.findById(id);
         return ResponseEntity.ok().body(product);
     }
 
+
+    @PostMapping
+    public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO dto){
+        ProductDTO product =  service.create(dto);
+        URI uri = ServletUriComponentsBuilder.
+            fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(product.getId())
+            .toUri();
+        return ResponseEntity.created(uri).body(product);
+    }
 
 }
